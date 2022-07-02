@@ -1,0 +1,14 @@
+{
+
+
+  "apiInfo": {
+    "baseUrl": "https://{0}.restapiexample.com/api/{1}",
+    "version": "v1",
+    "environment": "dummy",
+    "listAllEmployees": "/employees",
+    "perticularEmployeeDetails": "/employee/{empId}",
+    "update": "/update/{empId}",
+    "create": "/create"
+
+  }
+}

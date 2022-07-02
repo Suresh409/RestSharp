@@ -1,0 +1,16 @@
+﻿{
+
+
+	"Create Employee": {
+		"UserName": "12345678"
+
+	},
+	"Get Perticular Employee Details": {
+		"UserName": "12345679"
+
+	},
+	"Get All Employees": {
+		"UserName": "12345670"
+
+	}
+}
