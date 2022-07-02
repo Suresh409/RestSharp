@@ -13,41 +13,37 @@ namespace APIAutomation.Support
 {
     public class WS
     {
-        public static RestClient client;
-        public static RestRequest request;
-        public static RestResponse response;
-        private static JsonReader config = new JsonReader();
-        static Stopwatch stopWatch = new Stopwatch();
+        private static readonly JsonReader config = new();
+        static readonly Stopwatch stopWatch = new();
 
         public WS()
-        { 
-            response = new RestResponse();
+        {
+            WSHelpers.response = new RestResponse();
         }
 
-        public static void setUrl(string baseUrlKeyName)
+        public static void SetUrl(string baseUrlKeyName)
         {
          
-            string urlInConfigFile = config.getApiConfigValue(baseUrlKeyName);
-            String finalUrl = String.Format(urlInConfigFile, config.getApiConfigValue("environment"), config.getApiConfigValue("version"));
-            Console.WriteLine(finalUrl);
-            client = new RestClient(finalUrl);
+            string urlInConfigFile = JsonReader.GetApiConfigValue(baseUrlKeyName);
+            String finalUrl = String.Format(urlInConfigFile, JsonReader.GetApiConfigValue("environment"), JsonReader.GetApiConfigValue("version"));
+            WSHelpers.
+                        // Console.WriteLine(finalUrl);
+                        client = new RestClient(finalUrl);
         }
-        public static void setEndPoint(string endPoint)
+        public static void SetEndPoint(string endPoint)
         {
-            string endPointValue = config.getApiConfigValue(endPoint);
-            request = new RestRequest(endPointValue);
-            setDefaultHeaders();
+            string endPointValue = JsonReader.GetApiConfigValue(endPoint);
+            WSHelpers.request = new RestRequest(endPointValue);
+            SetDefaultHeaders();
         }
-        public static void setPathParam(string paramName, string value)
+        public static void SetPathParam(string paramName, string value)
         {
-            request.AddUrlSegment(paramName, value);
+            WSHelpers.request.AddUrlSegment(paramName, value);
 
         }
-        public static void setDefaultHeaders()
-        { 
-            //request.AddHeader("Accept", "application/json");
-   
-            request.AddHeaders(new Dictionary<string, string>
+        public static void SetDefaultHeaders()
+        {
+            WSHelpers.request.AddHeaders(new Dictionary<string, string>
             {
                 { "Accept", "application/json" },
                 { "Content-Type", "application/json" }
@@ -56,139 +52,131 @@ namespace APIAutomation.Support
             //request.AddFile("Test file", @"C:\Users\viswa\Downloads\Test.txt", "multipart/form-data");
         }
 
-        public static void setHeader(string keyName,string value)
+        public static void SetHeader(string keyName,string value)
         {
-            request.AddHeader(keyName, value);
+            WSHelpers.request.AddHeader(keyName, value);
         }
-        public static void changeHeaderValue(string keyName, string value)
+        public static void ChangeHeaderValue(string keyName, string value)
         {
-            request.AddOrUpdateHeader(keyName, value);
+            WSHelpers.request.AddOrUpdateHeader(keyName, value);
         }
-        public static void addRequestBody(object requestBody)
+        public static void AddRequestBody(object requestBody)
         {
-            request.AddJsonBody(JsonConvert.SerializeObject(requestBody));
+            WSHelpers.request.AddJsonBody(JsonConvert.SerializeObject(requestBody));
         }
 
-        public static RestResponse get()
+        public static RestResponse Get()
         {
             try
             {
                 stopWatch.Start();
-                response = client.Get(request);
+                WSHelpers.response = WSHelpers.client.Get(WSHelpers.request);
                 stopWatch.Stop();
-                Console.WriteLine("RESPONSE>>>>>>>>>>>>>>>>>>> " + response.Content);
-                return response;
+                //Console.WriteLine("RESPONSE>>>>>>>>>>>>>>>>>>> " + response.Content);
+                return WSHelpers.response;
             }
             catch (Exception e)
             {
-                // Handle exceptions in your CUSTOM CODE (restSharp will never throw itself)
+                throw new Exception(e.Message);
             }
             finally
             {
 
-               Console.WriteLine(LogRequest());
-                //LogRequest();
+               //Console.WriteLine(LogRequest());
+                LogRequest();
             }
-
-            return null;
         }
-        public static RestResponse post()
+        public static RestResponse Post()
         {
             try
             {
                 stopWatch.Start();
-                response = client.Post(request);
+                WSHelpers.response = WSHelpers.client.Post(WSHelpers.request);
                 stopWatch.Stop();
-                Console.WriteLine("RESPONSE>>>>>>>>>>>>>>>>>>> " + response.Content);
-                return response;
+                //Console.WriteLine("RESPONSE>>>>>>>>>>>>>>>>>>> " + response.Content);
+                return WSHelpers.response;
             }
             catch (Exception e)
             {
-                // Handle exceptions in your CUSTOM CODE (restSharp will never throw itself)
+                throw new Exception(e.Message);
             }
             finally
             {
                 LogRequest();
             }
 
-            return null;
-
         }
-        public static RestResponse put()
+        public static RestResponse Put()
         {
             try
             {
                 stopWatch.Start();
-                response = client.Put(request);
+                WSHelpers.response = WSHelpers.client.Put(WSHelpers.request);
                 stopWatch.Stop();
-                Console.WriteLine("RESPONSE>>>>>>>>>>>>>>>>>>> " + response.Content);
-                return response;
+                //Console.WriteLine("RESPONSE>>>>>>>>>>>>>>>>>>> " + response.Content);
+                return WSHelpers.response;
             }
             catch (Exception e)
             {
-                // Handle exceptions in your CUSTOM CODE (restSharp will never throw itself)
+                throw new Exception(e.Message);
             }
             finally
             {
                 LogRequest();
             }
 
-            return null;
-
         }
-        public static RestResponse patch()
+        public static RestResponse Patch()
         {
             try
             {
                 stopWatch.Start();
-                response = client.Patch(request);
+                WSHelpers.response = WSHelpers.client.Patch(WSHelpers.request);
                 stopWatch.Stop();
-                Console.WriteLine("RESPONSE>>>>>>>>>>>>>>>>>>> " + response.Content);
-                return response;
+                //Console.WriteLine("RESPONSE>>>>>>>>>>>>>>>>>>> " + response.Content);
+                return WSHelpers.response;
             }
             catch (Exception e)
             {
-                // Handle exceptions in your CUSTOM CODE (restSharp will never throw itself)
+                throw new Exception(e.Message);
             }
             finally
             {
 
                 LogRequest();
             }
-
-            return null;
         }
-        public static RestResponse delete()
+        public static RestResponse Delete()
         {
             try
             {
                 stopWatch.Start();
-                response = client.Delete(request);
+                WSHelpers.response = WSHelpers.client.Delete(WSHelpers.request);
                 stopWatch.Stop();
-                Console.WriteLine("RESPONSE>>>>>>>>>>>>>>>>>>> " + response.Content);
-                return response;
+                //Console.WriteLine("RESPONSE>>>>>>>>>>>>>>>>>>> " + response.Content);
+                return WSHelpers.response;
             }
             catch (Exception e)
             {
-                // Handle exceptions in your CUSTOM CODE (restSharp will never throw itself)
+                throw new Exception(e.Message);
             }
             finally
             {
                 LogRequest();
             }
-
-            return null;
         }
-         public static void verifyStatusCode(int expectedCode)
+         public static void VerifyStatusCode(string expectedCode)
         {
-            Assert.AreEqual(expectedCode, (int)response.StatusCode);
+            Assert.AreEqual(System.Convert.ToInt32(expectedCode), ((int)WSHelpers.response.StatusCode));
 
         }
 
-        public static string getResponse()
+        public static string GetResponse()
         {
 
-            return response.Content;
+#pragma warning disable CS8603 // Possible null reference return.
+            return WSHelpers.response.Content;
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public static string LogRequest()
@@ -197,29 +185,29 @@ namespace APIAutomation.Support
             {
                 var requestToLog = new
                 {
-                    resource = request.Resource,
+                    resource = WSHelpers.request.Resource,
                     // Parameters are custom anonymous objects in order to have the parameter type as a nice string
                     // otherwise it will just show the enum value
-                    parameters = request.Parameters.Select(parameter => new
+                    parameters = WSHelpers.request.Parameters.Select(parameter => new
                     {
                         name = parameter.Name,
                         value = parameter.Value,
                         type = parameter.Type.ToString()
                     }),
                     // ToString() here to have the method as a nice string otherwise it will just show the enum value
-                    method = request.Method.ToString(),
+                    method = WSHelpers.request.Method.ToString(),
                     // This will generate the actual Uri used in the request
-                    uri = client.BuildUri(request),
+                    uri = WSHelpers.client.BuildUri(WSHelpers.request),
                 };
 
                 var responseToLog = new
                 {
-                    statusCode = response.StatusCode,
-                    content = response.Content,
-                    headers = response.Headers,
+                    statusCode = WSHelpers.response.StatusCode,
+                    content = WSHelpers.response.Content,
+                    headers = WSHelpers.response.Headers,
                     // The Uri that actually responded (could be different from the requestUri if a redirection occurred)
-                    responseUri = response.ResponseUri,
-                    errorMessage = response.ErrorMessage,
+                    responseUri = WSHelpers.response.ResponseUri,
+                    errorMessage = WSHelpers.response.ErrorMessage,
                 };
 
                 return string.Format("Request completed in {0} ms, Request: {1}, Response: {2}",

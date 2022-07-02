@@ -26,19 +26,19 @@ public static string ReportPath;
             Console.WriteLine("PROJECT PATH->->->-> " + path1);
         string path = path1 + "Report\\index.html";
         ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(path);
-       // htmlReporter.Config().Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Standard;
         extent = new ExtentReports();
         extent.AttachReporter(htmlReporter);
     }
     [BeforeFeature]
-    public static void BeforeFeature()
+    public static void BeforeFeature(FeatureContext featureContext)
     {
         //Create dynamic feature name
-        featureName = extent.CreateTest<Feature>(FeatureContext.Current.FeatureInfo.Title);
+        featureName = extent.CreateTest<Feature>(featureContext.FeatureInfo.Title);
         Console.WriteLine("BeforeFeature");
     }
     [BeforeScenario]
-    public void BeforeScenario()
+        [Obsolete]
+        public void BeforeScenario()
     {
         Console.WriteLine("BeforeScenario");
             string path1 = AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\net6.0", "");
@@ -47,7 +47,8 @@ public static string ReportPath;
 
     }
     [AfterStep]
-    public void InsertReportingSteps()
+        [Obsolete]
+        public void InsertReportingSteps()
     {
         var stepType = ScenarioStepContext.Current.StepInfo.StepDefinitionType.ToString();
         if (ScenarioContext.Current.TestError == null)

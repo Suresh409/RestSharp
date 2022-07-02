@@ -1,0 +1,12 @@
+﻿{
+	"Get Perticular Employee Details": {
+		"UserName": "12345679",
+		"StatusCode": 200
+
+	},
+	"Get All Employees": {
+		"UserName": "12345670",
+		"StatusCode": 200
+
+	}
+}

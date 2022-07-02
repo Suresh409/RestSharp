@@ -15,78 +15,69 @@ namespace APIAutomation.StepDefinitions
     public sealed class EmployeeStepDefinitions
     { 
         private Employee employee_info;
-        private static Create new_emloyee;
-        string jsonBody;
 
 
         [Given("the customer is set all the headers to run the Api")]
-        public void setTheRequest()
+        public static void SetTheRequest()
         {
-            WS.setUrl("baseUrl");
+            WS.SetUrl("baseUrl");
          }
 
         [When("the Customer try to view the list of customers")]
-        public void getAllEmployees()
+        public static void GetAllEmployees()
         {
-          
-            Console.WriteLine("WHEN EXECUTED");
-            Console.WriteLine("USERNAME : "+ getTestDataValue("UserName"));
-
-           WS.setEndPoint("listAllEmployees");
-           WS.setDefaultHeaders();
-           WS.get();
+           WS.SetEndPoint("listAllEmployees");
+           WS.SetDefaultHeaders();
+           WS.Get();
         }
 
         [When("the Customer try to view the perticuler customer details")]
-        public void getPerticulerCustomerDetails(Table table)
+        public static void GetPerticulerCustomerDetails(Table table)
         {
             var dictionary = TableExtension.ToDictionary(table);
             var empId = dictionary["employeeId"];
-            Console.WriteLine("WHEN EXECUTED");
-            Console.WriteLine("USERNAME : " + getTestDataValue("UserName"));
-            WS.setEndPoint("perticularEmployeeDetails");
-            WS.setPathParam("empId", empId);
-            WS.get();
+            //Console.WriteLine("USERNAME : " + getTestDataValue("UserName"));
+            WS.SetEndPoint("perticularEmployeeDetails");
+            WS.SetPathParam("empId", empId);
+            WS.Get();
         }
         [Then("verify the status code as 200")]
-        public void WhenTheTwoNumbersAreAdded()
+        public static void VerifyStatusCode()
         {
-            WS.verifyStatusCode(200);
+            WS.VerifyStatusCode(GetTestDataValue("StatusCode"));
         }
 
         [Then("get the employeeName")]
-        public void getEmployeName()
+        public static void GetEmployeName()
         {
-      //TODO
+                 //TODO
         }
         [Then("The employee should have the following values")]
         public void ThenTheEmployeeShouldHaveTheFollowingValues(Table table)
         {
 
-             employee_info = JsonSerializer.Deserialize<Employee>(WS.response.Content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            Console.WriteLine(WS.response.Content);
+             employee_info = JsonSerializer.Deserialize<Employee>(WSHelpers.response.Content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             Console.WriteLine("ACTUAL ID : " + employee_info.data.id);
-            Console.WriteLine("EMP NAME:" + employee_info.status);
+            Console.WriteLine("Actual status :" + employee_info.status);
             var dictionary = TableExtension.ToDictionary(table);
             string id =  dictionary.FirstOrDefault(x => x.Key == "id").Value;
             Console.WriteLine("EXPECTED ID : " + id);
 
         }
 
-
         [When("the Customer try to create Employee")]
-        public void createEmployee()
+        public static void CreateEmployee()
         {
-            //JObject jobj2 = new JObject();
-            Console.WriteLine("USERNAME : " + getTestDataValue("UserName"));
-            Create c = new Create();
-            c.name = "Suresh";
-            c.salary = "10000";
-            c.age = "35";
-            WS.setEndPoint("create");
-            WS.setDefaultHeaders();
-            WS.addRequestBody(c);
-            WS.post();
+            Create c = new()
+            {
+                name = GetTestDataValue("name"),
+                salary = GetTestDataValue("salary"),
+                age = GetTestDataValue("age")
+            };
+            WS.SetEndPoint("create");
+            WS.SetDefaultHeaders();
+            WS.AddRequestBody(c);
+            WS.Post();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace APIAutomation.Support
     public class ExcelReader
     {
         [Obsolete]
-        public static void readExecl() {
+        public static void ReadExecl() {
 
             Dictionary<string, Dictionary<string, string>> testCaseWithColumnValues = new Dictionary<string, Dictionary<string, string>>();
 
@@ -78,7 +78,7 @@ namespace APIAutomation.Support
         static void Main()
         {
 
-            readExecl();
+            ReadExecl();
         }
 
     }
